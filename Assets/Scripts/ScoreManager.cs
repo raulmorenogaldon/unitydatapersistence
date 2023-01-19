@@ -32,9 +32,35 @@ public class ScoreManager : MonoBehaviour
         return scoreData.lastPlayerName;
     }
 
+    public void SetHighScore(int highScore)
+    {
+        scoreData.highScore = highScore;
+
+        // Save changes to data
+        SaveData();
+    }
+
+    public int GetHighScore()
+    {
+        return scoreData.highScore;
+    }
+
+    public void SetHighScorePlayerName(string playerName)
+    {
+        scoreData.highScorePlayerName = playerName;
+
+        // Save changes to data
+        SaveData();
+    }
+
+    public string GetHighScorePlayerName()
+    {
+        return scoreData.highScorePlayerName;
+    }
+
     public void SaveData()
     {
-        if(scoreData != null)
+        if (scoreData != null)
         {
             string savePath = Application.persistentDataPath + "/score.json";
 

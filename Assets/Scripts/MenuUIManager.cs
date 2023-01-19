@@ -26,8 +26,6 @@ public class MenuUIManager : MonoBehaviour
         if (string.IsNullOrEmpty(nameField.text))
         {
             startButton.interactable = false;
-            //ScoreManager.Instance.scoreData.lastPlayerName = 
-            //string inputName = nameField.text;
         }
         else
         {

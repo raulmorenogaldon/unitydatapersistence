@@ -11,6 +11,7 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text HighScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -60,6 +61,14 @@ public class MainManager : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
+
+        // Update High Score always to show current player in case
+        UpdateHighScore();
+    }
+
+    private void LateUpdate()
+    {
+        UpdateHighScoreText();
     }
 
     void AddPoint(int point)
@@ -68,8 +77,29 @@ public class MainManager : MonoBehaviour
         ScoreText.text = $"Score : {m_Points}";
     }
 
+    void UpdateHighScoreText()
+    {
+        int highScore = ScoreManager.Instance.GetHighScore();
+        string highScorePlayer = ScoreManager.Instance.GetHighScorePlayerName();
+        HighScoreText.text = $"Best Score : {highScorePlayer} : {highScore}";
+    }
+
+    void UpdateHighScore()
+    {
+        int highScore = ScoreManager.Instance.GetHighScore();
+
+        if(highScore <= m_Points)
+        {
+            ScoreManager.Instance.SetHighScore(m_Points);
+            ScoreManager.Instance.SetHighScorePlayerName(ScoreManager.Instance.GetLastPlayerName());
+        }
+
+    }
+
     public void GameOver()
     {
+        UpdateHighScore();
+
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
