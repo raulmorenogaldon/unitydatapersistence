@@ -10,22 +10,38 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager Instance;
 
     [System.Serializable]
-    public class ScoreData
+    class ScoreData
     {
-        int highScore;
-        string highScorePlayerName;
-        string lastPlayerName;
+        public int highScore;
+        public string highScorePlayerName;
+        public string lastPlayerName;
     }
 
-    public ScoreData scoreData;
+    private ScoreData scoreData;
+
+    public void SetLastPlayerName(string lastPlayerName)
+    {
+        scoreData.lastPlayerName = lastPlayerName;
+
+        // Save changes to data
+        SaveData();
+    }
+
+    public string GetLastPlayerName()
+    {
+        return scoreData.lastPlayerName;
+    }
 
     public void SaveData()
     {
-        string savePath = Application.persistentDataPath + "/score.json";
+        if(scoreData != null)
+        {
+            string savePath = Application.persistentDataPath + "/score.json";
 
-        // Save data to disk
-        string json = JsonUtility.ToJson(scoreData);
-        File.WriteAllText(savePath, json);
+            // Save data to disk
+            string json = JsonUtility.ToJson(scoreData);
+            File.WriteAllText(savePath, json);
+        }
     }
 
     public void LoadData()
@@ -46,6 +62,9 @@ public class ScoreManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // Initialize score data
+            scoreData = new ScoreData();
         }
         else
         {

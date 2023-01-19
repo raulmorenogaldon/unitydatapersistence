@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using TMPro;
 
 public class MenuUIManager : MonoBehaviour
@@ -12,6 +15,9 @@ public class MenuUIManager : MonoBehaviour
 
     public void StartGame()
     {
+        // Set player name
+        ScoreManager.Instance.SetLastPlayerName(nameField.text);
+
         SceneManager.LoadScene(1);
     }
 
@@ -34,11 +40,20 @@ public class MenuUIManager : MonoBehaviour
     {
         // Load previous data
         ScoreManager.Instance.LoadData();
+
+        string lastPlayerName = ScoreManager.Instance.GetLastPlayerName();
+        if (lastPlayerName != null) nameField.text = lastPlayerName;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Exit()
     {
-        
+        // Save Data
+        ScoreManager.Instance.SaveData();
+
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#else
+        Application.Quit();
+#endif
     }
 }
